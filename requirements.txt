@@ -1,2 +1,8 @@
 python-dotenv
 gql
+graphql-query
+customtkinter
+pygame>=1.9.1
+pillow
+psutil
+pygame-widgets

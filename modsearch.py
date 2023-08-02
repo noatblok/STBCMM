@@ -1,5 +1,7 @@
 from gql import gql, Client
 from gql.transport.aiohttp import AIOHTTPTransport
+# In case I make this work for other gamefront games
+game_id = 8
 
 transport = AIOHTTPTransport(url="https://ikora.gamefront.com/graphql")
 
@@ -7,8 +9,8 @@ client = Client(transport=transport, fetch_schema_from_transport=True)
 
 catQuery = gql(
 """
-{
-	game(id:8){
+query getGameCategories ($game:ID!) {
+	game(id:$game){
 		categories(parent:0){
             id
             name
@@ -17,22 +19,21 @@ catQuery = gql(
 	}
 }
 """)
-r = client.execute(catQuery)
-#print(r)
+r = client.execute(catQuery, {"game": game_id})
 categories = r["game"]["categories"]
 categorydict = {}
 for category in categories:
     categorydict[category["name"].lower()] = category
     print(f"Name:\n{category['name']}\nFile Count:\n{category['file_count']}")
 print("Choose a category:")
-cat = input("- ")
-if cat.lower() in categorydict.keys():
+cat = input("- ").lower()
+if cat in categorydict.keys():
     print(f"Selected {categorydict[cat]['name']}")
 cat = categorydict[cat]
 query = gql(
 """
-{
-	file_category(id:%s){
+query getFileDetails($id: ID!){
+	file_category(id:$id){
         files{
             data{
                 title
@@ -40,5 +41,5 @@ query = gql(
         }
     }
 }
-""" % cat["id"])
-print(client.execute(query))
+""")
+print(client.execute(query, {"id": cat["id"]}))

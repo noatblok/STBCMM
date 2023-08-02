@@ -1,0 +1,11 @@
+# global config
+UI_PLACEMENT_MODE = False
+RESOLUTION = (1366, 768)
+#RESOLUTION = (1366, 768)
+FPS = 60
+DEV_MODE = False
+SOUND = False
+PIN = '4001@'
+FULLSCREEN = False
+
+# 566 288
